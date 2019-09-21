@@ -95,8 +95,9 @@ def build_train(num_states, num_actions, lr=5e-4, gamma=1.0):
             dqn_local.load_state_dict(state_dict)
         update_target()
 
-    def save(path):
-        torch.save(dqn_local.state_dict(), path)
+    def save(path, train_mode=True):
+        if train_mode:
+            torch.save(dqn_local.state_dict(), path)
 
     return act, train, update_target, load, save
 
@@ -221,6 +222,6 @@ def learn(
             if saved_mean_reward is None or mean_100ep_reward > saved_mean_reward:
                 print("saving model due to mean reward increase {} -> {}".format(saved_mean_reward, mean_100ep_reward))
                 saved_mean_reward = mean_100ep_reward
-                save(model_file)
+                save(model_file, train_mode=train_mode)
 
     return act
