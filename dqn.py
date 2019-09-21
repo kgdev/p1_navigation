@@ -89,7 +89,7 @@ def build_train(num_states, num_actions, lr=5e-4, gamma=1.0):
             target_param.data.copy_(tau*local_param.data + (1.0-tau)*target_param.data)
 
     def load(path, train_mode=True):
-        if train_mode and os.path.exists(path):
+        if not train_mode and os.path.exists(path):
             print("loading from {}".format(path))
             state_dict = torch.load(path)
             dqn_local.load_state_dict(state_dict)
@@ -175,7 +175,6 @@ def learn(
 
     for t in tqdm(range(total_timesteps)):
         eps = exploration.value(t)
-        # writer.add_scalar("eps", eps, t)
         action = act(state, eps)
 
         env_info = env.step(action)[brain_name]
