@@ -91,7 +91,7 @@ def build_train(num_states, num_actions, lr=5e-4, gamma=1.0):
     def load(path, train_mode=True):
         if not train_mode and os.path.exists(path):
             print("loading from {}".format(path))
-            state_dict = torch.load(path)
+            state_dict = torch.load(path, map_location=device)
             dqn_local.load_state_dict(state_dict)
         update_target()
 
